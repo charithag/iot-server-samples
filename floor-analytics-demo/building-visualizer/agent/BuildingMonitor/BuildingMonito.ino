@@ -1,3 +1,4 @@
+
 /**
 * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 *
@@ -15,7 +16,6 @@
 * specific language governing permissions and limitations
 * under the License.
 **/
-
 
 #include <DHT.h>
 #include <DHT_U.h>
@@ -38,7 +38,7 @@
 
 #define DHTTYPE DHT11
 
-DHT dht(DHT11_PIN, DHTTYPE, 30);
+DHT dht(DHT11_PIN, DHTTYPE, 30); 
 
 unsigned long previousMillis = 0;        // will store last temp was read
 const long interval = 500;              // interval at which to read sensor
@@ -92,10 +92,10 @@ void setup_wifi() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print("Trying to connectto : ");
-    Serial.println(ssid);
+    Serial.println(ssid);  
   }
   Serial.print("Connected to : ");
-  Serial.println(ssid);
+  Serial.println(ssid);  
   Serial.println(WiFi.localIP());
 }
 
@@ -154,14 +154,14 @@ boolean registerme() {
         Serial.println("test");
         Serial.println(apiKey);
         Serial.println(accessToken);
-        Serial.println(refreshToken);
+        Serial.println(refreshToken);      
         return true;
       }else{
         Serial.println("\nUsing hardcoded access token");
         return false;
       }
     } else {
-      return false;
+      return false;  
     }
   }
 }
@@ -241,7 +241,7 @@ void setup() {
   Serial.begin(115200);
 
 //  /
-
+  
   setup_wifi();
   snprintf (device_id, 100, "%i", ESP.getChipId());
 
@@ -295,9 +295,9 @@ void loop() {
             Serial.println("Error while connecting with MQTT server.");
           }
         }
-
+     
      }
-
+    
    }
 
   if (!client.connected()) {
@@ -309,13 +309,13 @@ void loop() {
   if (isMovingTemp == 1) {
     isMoving = 1;
   }
-
+  
   if (millis() - startDelay > interval) {
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();
     int airQuality = 0;//digitalRead(GAS);
     int light = analogRead(LDR_PIN);
-
+    
     snprintf (msg, 150, "{\"event\":{\"payloadData\":{\"deviceId\":\"%s\", \"temperature\":%d.0 , \"motion\":%ld.0, \"humidity\":%d.0  , \"airQuality\":%ld.0, \"light\":%ld.0}}}"
     , device_id, (int)temperature, isMoving, (int)humidity, airQuality, light);
     snprintf (publishTopic, 100, "%s/senseme/%s", tenant_domain, device_id);
@@ -327,9 +327,9 @@ void loop() {
       //Serial.println(msg);
   //  }
     isMoving = 0;
-
+    
     //client.publish("carbon.super/senseme/2940205", "{\"event\":{\"payloadData\":{\"deviceId\":\"2940205\", \"temperature\":27.0 , \"motion\":1.0, \"humidity\":85.0  , \"airQuality\":50.0, \"light\":1024.0}}}");
-
+    
     startDelay = millis();
   }
 }
